@@ -19,5 +19,7 @@ jobs:
           sudo apt install -y git gradle openjdk-11-jdk gcc libpcsclite-dev libpython3-dev
       - name: Build FIDO2Applet
         run: |
+          export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+          export PATH=$JAVA_HOME/bin:$PATH
           export JC_HOME=sdks/${{ matrix.sdk }}
           ./gradlew buildJavaCard
