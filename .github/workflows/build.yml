@@ -2,14 +2,22 @@ name: Build
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-26.04
+    strategy:
+      matrix:
+        sdk: [jc304_kit, jc305u4_kit]
     steps:
       - uses: actions/checkout@v7
         with:
           submodules: 'true'
       - name: Install packages
         run: |
-          sudo apt update && sudo apt upgrade -y
-          sudo apt install -y git gradle default-jdk gcc libpcsclite-dev libpython3-dev
+          sudo apt install -y git gradle openjdk-11-jdk gcc libpcsclite-dev libpython3-dev
+      - name: Build FIDO2Applet
+        run: |
+          export JC_HOME=sdks/${{ matrix.sdk }}
+          ./gradlew buildJavaCard
